@@ -1,6 +1,7 @@
 // src/main/java/art/ameliah/fabric/autosprintfix/AutoSprintFix.java
 package art.ameliah.fabric.autosprintfix;
 
+import art.ameliah.fabric.autosprintfix.command.FriendsCommand;
 import art.ameliah.fabric.autosprintfix.core.event.EventBus;
 import art.ameliah.fabric.autosprintfix.core.event.Listener;
 import art.ameliah.fabric.autosprintfix.core.event.events.KeyPressEvent;
@@ -17,6 +18,9 @@ import org.lwjgl.glfw.GLFW;
  * Initializes all systems and manages the mod lifecycle.
  */
 public class AutoSprintFix implements ClientModInitializer {
+
+	// Flag used by legacy autosprint logic to detect respawn state
+	public static boolean respawning = false;
 
 	// Mod instance
 	private static AutoSprintFix instance;
@@ -44,6 +48,7 @@ public class AutoSprintFix implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+
 		instance = this;
 
 		// Initialize logger
@@ -63,6 +68,9 @@ public class AutoSprintFix implements ClientModInitializer {
 		// Initialize module manager
 		moduleManager = ModuleManager.getInstance();
 		moduleManager.initialize();
+
+		// Register commands
+		FriendsCommand.register();
 
 		logger.info("AutoSprintFix initialized successfully!");
 	}
@@ -85,7 +93,7 @@ public class AutoSprintFix implements ClientModInitializer {
 	@Listener
 	public void onKeyPress(KeyPressEvent event) {
 		// Only handle key press events (not release or repeat)
-		if (event.getAction() != GLFW.GLFW_PRESS) {
+		if (event.action != GLFW.GLFW_PRESS) {
 			return;
 		}
 
@@ -95,7 +103,7 @@ public class AutoSprintFix implements ClientModInitializer {
 		}
 
 		// Check for GUI open key (from settings)
-		if (event.getKeyCode() == GuiSettings.getInstance().getGuiOpenKey()) {
+		if (event.keyCode == GuiSettings.getInstance().getGuiOpenKey()) {
 			openModuleScreen();
 		}
 	}

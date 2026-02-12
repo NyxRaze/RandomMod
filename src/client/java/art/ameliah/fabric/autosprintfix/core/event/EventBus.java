@@ -89,7 +89,7 @@ public class EventBus {
                 continue;
             }
 
-            // Get the annotation (we know it exists now)
+            // Get the annotation
             @SuppressWarnings("null")
             Listener annotation = method.getAnnotation(Listener.class);
 

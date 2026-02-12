@@ -9,16 +9,16 @@ import art.ameliah.fabric.autosprintfix.core.event.Event;
 public class KeyPressEvent extends Event {
 
     // The GLFW key code
-    private final int keyCode;
+    public final int keyCode;
 
     // The scan code
-    private final int scanCode;
+    public final int scanCode;
 
     // Key action (press, release, repeat)
-    private final int action;
+    public final int action;
 
     // Modifier keys (shift, ctrl, alt)
-    private final int modifiers;
+    public final int modifiers;
 
     /**
      * Creates a new key press event.
@@ -33,41 +33,5 @@ public class KeyPressEvent extends Event {
         this.scanCode = scanCode;
         this.action = action;
         this.modifiers = modifiers;
-    }
-
-    /**
-     * Gets the GLFW key code.
-     * 
-     * @return The key code
-     */
-    public int getKeyCode() {
-        return keyCode;
-    }
-
-    /**
-     * Gets the scan code.
-     * 
-     * @return The scan code
-     */
-    public int getScanCode() {
-        return scanCode;
-    }
-
-    /**
-     * Gets the key action.
-     * 
-     * @return The action (GLFW_PRESS, GLFW_RELEASE, GLFW_REPEAT)
-     */
-    public int getAction() {
-        return action;
-    }
-
-    /**
-     * Gets the modifier keys.
-     * 
-     * @return The modifiers bitmask
-     */
-    public int getModifiers() {
-        return modifiers;
     }
 }

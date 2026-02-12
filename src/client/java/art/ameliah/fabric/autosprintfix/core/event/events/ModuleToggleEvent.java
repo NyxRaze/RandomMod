@@ -10,10 +10,10 @@ import art.ameliah.fabric.autosprintfix.core.module.Module;
 public class ModuleToggleEvent extends Event {
 
     // The module being toggled
-    private final Module module;
+    public final Module module;
 
     // The new enabled state
-    private final boolean enabled;
+    public final boolean enabled;
 
     /**
      * Creates a new module toggle event.
@@ -24,23 +24,5 @@ public class ModuleToggleEvent extends Event {
     public ModuleToggleEvent(Module module, boolean enabled) {
         this.module = module;
         this.enabled = enabled;
-    }
-
-    /**
-     * Gets the module being toggled.
-     * 
-     * @return The module
-     */
-    public Module getModule() {
-        return module;
-    }
-
-    /**
-     * Gets the new enabled state.
-     * 
-     * @return true if the module is being enabled
-     */
-    public boolean isEnabled() {
-        return enabled;
     }
 }

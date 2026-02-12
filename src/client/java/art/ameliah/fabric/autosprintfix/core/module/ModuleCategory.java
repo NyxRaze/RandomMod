@@ -9,9 +9,6 @@ public enum ModuleCategory {
     // Combat-related modules (sword icon)
     COMBAT("Combat", "\u2694", 0xFFFF5555),
 
-    // Movement-related modules (arrow icon)
-    MOVEMENT("Movement", "\u27A4", 0xFF55FF55),
-
     // Visual/render modules (eye icon)
     RENDER("Render", "\u25C9", 0xFF55FFFF),
 

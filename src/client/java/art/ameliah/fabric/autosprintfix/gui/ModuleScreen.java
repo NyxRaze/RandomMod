@@ -1,4 +1,3 @@
-// src/main/java/art/ameliah/fabric/autosprintfix/gui/ModuleScreen.java
 package art.ameliah.fabric.autosprintfix.gui;
 
 import art.ameliah.fabric.autosprintfix.core.logger.ModLogger;
@@ -10,6 +9,7 @@ import art.ameliah.fabric.autosprintfix.core.module.settings.ModeSetting;
 import art.ameliah.fabric.autosprintfix.core.module.settings.NumberSetting;
 import art.ameliah.fabric.autosprintfix.core.module.settings.RangeSetting;
 import art.ameliah.fabric.autosprintfix.core.module.settings.Setting;
+import art.ameliah.fabric.autosprintfix.core.module.settings.StringSetting;
 import art.ameliah.fabric.autosprintfix.gui.util.ColorUtils;
 import art.ameliah.fabric.autosprintfix.gui.util.RenderUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,7 +56,7 @@ public class ModuleScreen extends Screen {
     };
 
     // Currently selected category
-    private ModuleCategory selectedCategory = ModuleCategory.MOVEMENT;
+    private ModuleCategory selectedCategory = ModuleCategory.COMBAT;
 
     // Animation progress
     private float openAnimation = 0f;
@@ -100,6 +100,7 @@ public class ModuleScreen extends Screen {
     private int hoveredModuleIndex = -1;
     private int hoveredModuleKeybindIndex = -1;
     private int hoveredModuleExpandIndex = -1;
+    private int hoveredModuleNameIndex = -1;
     private boolean settingsButtonHovered = false;
     private int hoveredThemeButton = -1;
     private boolean keybindButtonHovered = false;
@@ -146,6 +147,7 @@ public class ModuleScreen extends Screen {
         editingColorIndex = -1;
         colorInputText = "";
         colorInputFocused = false;
+        hoveredModuleNameIndex = -1;
 
         logger.debug("ModuleScreen.init() called");
     }
@@ -178,6 +180,15 @@ public class ModuleScreen extends Screen {
 
         if (listeningModule != null) {
             renderKeybindListeningOverlay(graphics);
+        }
+
+        // Render module description tooltip
+        if (hoveredModuleNameIndex >= 0 && !settingsOpen) {
+            List<Module> modules = getFilteredModules();
+            if (hoveredModuleNameIndex < modules.size()) {
+                Module module = modules.get(hoveredModuleNameIndex);
+                RenderUtils.drawTooltip(graphics, module.getDescription(), mouseX, mouseY, 200);
+            }
         }
 
         super.render(graphics, mouseX, mouseY, delta);
@@ -635,6 +646,7 @@ public class ModuleScreen extends Screen {
         hoveredModuleIndex = -1;
         hoveredModuleKeybindIndex = -1;
         hoveredModuleExpandIndex = -1;
+        hoveredModuleNameIndex = -1;
 
         int currentY = contentY - (int) scrollOffset;
 
@@ -657,6 +669,11 @@ public class ModuleScreen extends Screen {
                         mouseY >= keybindBtnY && mouseY < keybindBtnY + keybindBtnHeight &&
                         mouseY >= contentY && mouseY < contentY + contentHeight;
 
+                // Check if mouse is hovering over module name
+                int nameWidth = RenderUtils.getStringWidth(module.getName());
+                boolean nameHovered = mouseX >= contentX + 12 && mouseX < contentX + 12 + nameWidth &&
+                        mouseY >= currentY + 8 && mouseY < currentY + 8 + RenderUtils.getFontHeight();
+
                 boolean expandHovered = !module.getSettings().isEmpty() && cardHovered && !keybindHovered &&
                         mouseX < contentX + contentWidth - 110;
 
@@ -666,9 +683,11 @@ public class ModuleScreen extends Screen {
                     hoveredModuleKeybindIndex = i;
                 if (expandHovered)
                     hoveredModuleExpandIndex = i;
+                if (nameHovered)
+                    hoveredModuleNameIndex = i;
 
                 renderModuleCard(graphics, module, contentX, currentY, contentWidth, cardHovered, keybindHovered,
-                        isExpanded, mouseX, mouseY, contentY, contentHeight);
+                        isExpanded, nameHovered, mouseX, mouseY, contentY, contentHeight);
             }
 
             currentY += cardHeight + MODULE_CARD_SPACING;
@@ -720,7 +739,7 @@ public class ModuleScreen extends Screen {
      * Renders a single module card with expandable settings.
      */
     private void renderModuleCard(GuiGraphics graphics, Module module, int x, int y, int width,
-            boolean cardHovered, boolean keybindHovered, boolean isExpanded,
+            boolean cardHovered, boolean keybindHovered, boolean isExpanded, boolean nameHovered,
             int mouseX, int mouseY, int contentY, int contentHeight) {
         int totalHeight = getModuleCardHeight(module, isExpanded);
 
@@ -731,21 +750,15 @@ public class ModuleScreen extends Screen {
         RenderUtils.fill(graphics, x, y + 5, x + 3, y + MODULE_CARD_HEIGHT - 5, accentColor);
 
         // Module name
+        int nameWidth = RenderUtils.getStringWidth(module.getName());
         RenderUtils.drawString(graphics, module.getName(), x + 12, y + 8, ColorUtils.TEXT_PRIMARY);
 
         // Expand arrow
         if (!module.getSettings().isEmpty()) {
             String arrow = isExpanded ? "\u25BC" : "\u25B6";
-            int arrowX = x + 12 + RenderUtils.getStringWidth(module.getName()) + 5;
+            int arrowX = x + 12 + nameWidth + 5;
             RenderUtils.drawString(graphics, arrow, arrowX, y + 8, ColorUtils.TEXT_TERTIARY);
         }
-
-        // Description
-        String desc = module.getDescription();
-        if (desc.length() > 28) {
-            desc = desc.substring(0, 25) + "...";
-        }
-        RenderUtils.drawString(graphics, desc, x + 12, y + 22, ColorUtils.TEXT_SECONDARY);
 
         // Keybind button
         int keybindBtnX = x + width - 100;
@@ -809,6 +822,8 @@ public class ModuleScreen extends Screen {
                 renderNumberControl(graphics, numSetting, controlX - 20, controlY, 90);
             } else if (setting instanceof RangeSetting rangeSetting) {
                 renderRangeControl(graphics, rangeSetting, controlX - 30, controlY, 100);
+            } else if (setting instanceof StringSetting stringSetting) {
+                renderStringControl(graphics, stringSetting, controlX - 30, controlY, 100, SETTING_HEIGHT - 4);
             }
 
             settingY += SETTING_HEIGHT + 3;
@@ -875,10 +890,9 @@ public class ModuleScreen extends Screen {
         RenderUtils.drawRect(graphics, x, y, width, height, ColorUtils.CARD_BORDER, 1);
 
         String modeText = setting.getValue();
-        if (modeText.length() > 10) {
-            modeText = modeText.substring(0, 8) + "..";
-        }
-        RenderUtils.drawCenteredString(graphics, modeText, x + width / 2, y + 4, ColorUtils.TEXT_PRIMARY);
+        // Use intelligent truncation that preserves more content
+        String truncatedMode = RenderUtils.truncateString(modeText, width - 8); // Leave padding
+        RenderUtils.drawCenteredString(graphics, truncatedMode, x + width / 2, y + 4, ColorUtils.TEXT_PRIMARY);
     }
 
     /**
@@ -897,6 +911,28 @@ public class ModuleScreen extends Screen {
 
         String valueText = setting.getDisplayValue();
         RenderUtils.drawString(graphics, valueText, x + width - 25, y + 2, ColorUtils.TEXT_SECONDARY);
+    }
+
+    /**
+     * Renders a string input control.
+     * 
+     * @param graphics The GUI graphics context
+     * @param setting  The string setting to render
+     * @param x        X position
+     * @param y        Y position
+     * @param width    Width of the input box
+     * @param height   Height of the input box
+     */
+    private void renderStringControl(GuiGraphics graphics, StringSetting setting, int x, int y, int width, int height) {
+        // Draw background box
+        RenderUtils.fillRounded(graphics, x, y, width, height, 4, ColorUtils.TOGGLE_OFF);
+
+        // Draw border
+        RenderUtils.drawRect(graphics, x, y, width, height, 4, ColorUtils.CARD_BORDER);
+
+        // Draw text inside the box
+        String displayText = setting.getValue();
+        RenderUtils.drawString(graphics, displayText, x + 4, y + (height / 2) - 4, ColorUtils.TEXT_PRIMARY);
     }
 
     /**
@@ -1090,6 +1126,7 @@ public class ModuleScreen extends Screen {
             scrollOffset = 0;
             targetScrollOffset = 0;
             expandedModule = null;
+            hoveredModuleNameIndex = -1;
             return true;
         }
 

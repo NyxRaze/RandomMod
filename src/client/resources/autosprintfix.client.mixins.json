@@ -5,7 +5,15 @@
   "compatibilityLevel": "JAVA_21",
   "priority": 1337,
   "mixinPriority": 1337,
-  "client": ["KeyboardMixin", "ClientTickMixin"],
+  "client": [
+    "MixinClientPlayerEntity",
+    "MixinKeyboardHandler",
+    "MixinKeyboardInput",
+    "MixinLivingEntity",
+    "MixinMinecraft",
+    "MixinMultiPlayerGameMode",
+    "MixinStickyKeyBinding"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

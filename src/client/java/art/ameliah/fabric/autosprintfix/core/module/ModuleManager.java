@@ -237,7 +237,7 @@ public class ModuleManager {
     @Listener
     public void onKeyPress(KeyPressEvent event) {
         // Only handle key press events (not release or repeat)
-        if (event.getAction() != GLFW.GLFW_PRESS) {
+        if (event.action != GLFW.GLFW_PRESS) {
             return;
         }
 
@@ -249,7 +249,7 @@ public class ModuleManager {
 
         // Check each module's keybind
         for (Module module : modules) {
-            if (module.matchesKey(event.getKeyCode())) {
+            if (module.matchesKey(event.keyCode)) {
                 module.toggle();
             }
         }
