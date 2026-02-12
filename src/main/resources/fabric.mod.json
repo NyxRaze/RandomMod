@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "autosprintfix",
+  "version": "${version}",
+  "name": "AutoSprintFix",
+  "description": "Brings MC-263293 back into the game",
+  "authors": ["Amelia"],
+  "contact": {
+    "sources": "https://github.com/Fesaa/AutoSprintFix"
+  },
+  "license": "LGPL-3",
+  "icon": "assets/autosprintfix/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": ["art.ameliah.fabric.autosprintfix.AutoSprintFix"]
+  },
+  "mixins": [
+    {
+      "config": "autosprintfix.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.2",
+    "minecraft": "1.21.11",
+    "java": ">=17"
+  }
+}

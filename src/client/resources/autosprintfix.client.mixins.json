@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "art.ameliah.fabric.autosprintfix.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "priority": 1337,
+  "mixinPriority": 1337,
+  "client": ["KeyboardMixin", "ClientTickMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
