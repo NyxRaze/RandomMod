@@ -1,5 +1,6 @@
 package art.ameliah.fabric.autosprintfix.core.module.modules.misc;
 
+import art.ameliah.fabric.autosprintfix.core.module.AutoRegister;
 import art.ameliah.fabric.autosprintfix.core.module.Module;
 import art.ameliah.fabric.autosprintfix.core.module.ModuleCategory;
 import art.ameliah.fabric.autosprintfix.core.module.settings.RangeSetting;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.Items;
  * cooldowns.
  * Supports mode selection for blocks, projectiles, or both.
  */
+@AutoRegister(priority = 0)
 public class FastPlace extends Module {
 
     private final Minecraft mc = Minecraft.getInstance();

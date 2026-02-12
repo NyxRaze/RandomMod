@@ -3,6 +3,7 @@ package art.ameliah.fabric.autosprintfix.core.module.modules.player;
 import art.ameliah.fabric.autosprintfix.core.event.Listener;
 import art.ameliah.fabric.autosprintfix.core.event.events.AttackEntityEvent;
 import art.ameliah.fabric.autosprintfix.core.event.events.MovementInputEvent;
+import art.ameliah.fabric.autosprintfix.core.module.AutoRegister;
 import art.ameliah.fabric.autosprintfix.core.module.Module;
 import art.ameliah.fabric.autosprintfix.core.module.ModuleCategory;
 import art.ameliah.fabric.autosprintfix.core.module.settings.BooleanSetting;
@@ -23,6 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Automatically sprint resets using W-Tap & S-Tap.
  * Replicates skilled player sprint reset techniques.
  */
+@AutoRegister(priority = 0)
 public class AutoSprint extends Module {
 
     private final Minecraft mc = Minecraft.getInstance();

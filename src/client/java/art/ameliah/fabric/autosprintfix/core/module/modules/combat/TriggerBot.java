@@ -80,7 +80,7 @@ public class TriggerBot extends Module {
 
         this.preferCrits = addSetting(new BooleanSetting(
                 "Prefer Crits",
-                "Only attack while falling",
+                "Prioritize attacks while falling, ignores attack when you're ascending.",
                 true));
 
         this.debugMode = addSetting(new BooleanSetting(

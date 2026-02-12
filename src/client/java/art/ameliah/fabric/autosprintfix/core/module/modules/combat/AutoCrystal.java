@@ -54,7 +54,7 @@ public class AutoCrystal extends Module {
         this.attackDelay = addSetting(new RangeSetting(
                 "Attack Delay",
                 "Randomized delay for attacking crystals (ticks)",
-                1, 3, 0, 5));
+                1, 2, 0, 5));
 
         this.debugMode = addSetting(new BooleanSetting(
                 "Debug Mode",

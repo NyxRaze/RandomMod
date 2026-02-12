@@ -1,5 +1,6 @@
 package art.ameliah.fabric.autosprintfix.core.module.modules.player;
 
+import art.ameliah.fabric.autosprintfix.core.module.AutoRegister;
 import art.ameliah.fabric.autosprintfix.core.module.Module;
 import art.ameliah.fabric.autosprintfix.core.module.ModuleCategory;
 import art.ameliah.fabric.autosprintfix.core.module.settings.BooleanSetting;
@@ -19,6 +20,7 @@ import net.minecraft.world.phys.AABB;
  * Automatically sneaks at edges while bridging or stair-jumping.
  * Helps prevent accidental falls during fast bridging.
  */
+@AutoRegister(priority = 0)
 public class Eagle extends Module {
 
     private final Minecraft mc = Minecraft.getInstance();

@@ -1,5 +1,6 @@
 package art.ameliah.fabric.autosprintfix.core.module.modules.misc;
 
+import art.ameliah.fabric.autosprintfix.core.module.AutoRegister;
 import art.ameliah.fabric.autosprintfix.core.module.Module;
 import art.ameliah.fabric.autosprintfix.core.module.ModuleCategory;
 import art.ameliah.fabric.autosprintfix.core.module.settings.BooleanSetting;
@@ -12,6 +13,7 @@ import art.ameliah.fabric.autosprintfix.core.logger.ModLogger;
  *
  * Allows TriggerBot (or other modules) to ignore friends and team members.
  */
+@AutoRegister(priority = 0)
 public class IgnoreList extends Module {
 
     private final ModLogger logger = ModLogger.getInstance();

@@ -74,7 +74,7 @@ public class AutoWeapon extends Module {
         this.swapBackDelay = addSetting(new RangeSetting(
                 "Swap-back Delay (ticks)",
                 "Delay before switching back to original slot",
-                1, 3, 0, 10));
+                1, 2, 0, 10));
 
         this.fallThreshold = addSetting(new NumberSetting(
                 "Density mace fall threshold",

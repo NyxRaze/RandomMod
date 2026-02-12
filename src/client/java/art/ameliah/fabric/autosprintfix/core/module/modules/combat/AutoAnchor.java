@@ -62,12 +62,12 @@ public class AutoAnchor extends Module {
         this.chargeDelay = addSetting(new RangeSetting(
                 "Charge Delay",
                 "Randomized delay before switching to glowstone",
-                1, 3, 0, 5));
+                1, 2, 0, 5));
 
         this.explodeDelay = addSetting(new RangeSetting(
                 "Explode Delay",
                 "Randomized delay before exploding charged anchor",
-                1, 3, 0, 5));
+                1, 2, 0, 5));
 
         this.debugMode = addSetting(new BooleanSetting(
                 "Debug Mode",
